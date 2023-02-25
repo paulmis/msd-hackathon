@@ -1,7 +1,6 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Chat from './Chat';
+import MapView from './MapView';
 
 function App() {
   return (
@@ -11,7 +10,7 @@ function App() {
       </div>
       <div className="main">
         <div className="left">
-          <p>text</p>
+          <MapView></MapView>
         </div>
         <div className="right">
           <p>text</p>
