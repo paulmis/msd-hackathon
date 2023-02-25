@@ -132,7 +132,7 @@ def break_christopher_query(s):
             result = search_by_query(query_value)
             response += result
         elif query_type == "location":
-            result = website_locations[int(query_value)]
+            result = str(website_locations[int(query_value)])
             response += result
     return response
 
@@ -183,7 +183,7 @@ def chatbot():
     # Get the query from the body of the request
     query = request.json['query']
     # Get the response from the chatbot
-    prompt = "User:" + query+"\n"
+    prompt = query+"\n"
     response = talk_to_gpt(prompt)
     # Return the response
     return jsonify(response)

@@ -4,3 +4,4 @@ openai
 flasgger
 python-dotenv
 numpy
+pandas
