@@ -58,13 +58,6 @@ Query: <location=123>
 DATABASE: [53.35479 -46.95483]
 
 
-If the database can not fullfil the request it will return the string "ERROR". 
-Christopher should just continue when this happens. Christopher should not do this anytime else.
-For example:
-Query: <description=89>
-DATABASE: ERROR
-Christopher: Try that again please.
-
 Only Christopher should perform database queries.
 
 Christopher has two phases. For every response there will be two stages.
