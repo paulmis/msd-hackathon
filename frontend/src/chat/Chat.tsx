@@ -15,7 +15,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     constructor(props: any) {
         super(props)
         this.state = {
-            messages: [{text: "sdfudhfudsfhudsfhudsfhusdfsdfsdfsahfisdf", type: MessageType.API}],
+            messages: [{text: "Hey, I'm Desearch. Write a question about organizations in Delft to get started.", type: MessageType.API}],
             history: [],
         }
     }
@@ -59,6 +59,11 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
                 history: data.messages,
                 messages: data.messages.map((text: string) => this.isDisplayMessage(text)).filter((message: MessageContent | null) => message != null) as MessageContent[],
             })
+
+            data.display = data.display.map((org: any) => ({
+                ...org,
+                "Organization Name": org["Organization Name"].startsWith("The name of the organization is ") ? org["Organization Name"].substring(32, org["Organization Name"].length - 1) : org["Organization Name"]
+            }))
 
             this.props.update_callback(data.display)
         })
