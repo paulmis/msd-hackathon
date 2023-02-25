@@ -1,0 +1,17 @@
+.chat {
+    background-color: #CCDBDC;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-input {
+    border: none;
+    border-radius: 6px;
+    font-size: large;
+    margin: 18px 18px 0px 18px;
+    min-height: 50px;
+    word-wrap: break-word;
+}

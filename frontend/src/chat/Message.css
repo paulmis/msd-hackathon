@@ -1,0 +1,32 @@
+.message {
+    border-radius: 10px;
+    max-width: 80%;
+    padding: 0px 8px 0px 8px;
+    overflow-wrap: break-word;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}   
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 18px;
+}
+
+.message-api { 
+    background-color: white;
+}
+
+.message-user {
+    background: lightblue;
+    text-align: left;
+    margin-left: auto; 
+    margin-right: 0;
+}
+
+.message-error {
+    background-color: red;
+}
