@@ -56,7 +56,7 @@ def get_description_of_website(index):
     if "Description" in all_data:
         return all_data["Description"]
     else:
-        return None
+        return "ERROR"
 
 def get_embedding_of_website(index):
     filtered_data = embeddings_data[embeddings_data["url"].str.startswith(id_to_website[index])]
@@ -87,6 +87,13 @@ def get_completion(s):
     )
     
     return response.choices[0].text
+
+def get_everything_about_website(index):
+    response = get_all_completions_data(index)
+    # add location
+    location = get_location_data(index)
+    response["Location"] = str(location)
+    return response
 
 def get_embedding(s):
     # Get the query from the body of the request
@@ -150,7 +157,7 @@ def talk_to_gpt(s, max_iters=10):
     response = get_completion(s)
     # Check if it ends with DATA
     if response.endswith("DATA"):
-        response = response + "BASE:"
+        response = response + "BASE: "
         query = response.split("Query:")[1].split("DATA")[0]
         broken_response = break_christopher_query(query)
         response += broken_response
@@ -162,9 +169,6 @@ def talk_to_gpt(s, max_iters=10):
             return s + talk_to_gpt(response, max_iters-1)
     else:
         return s + response
-# print(
-#     talk_to_gpt("\nUser: Find me the locations of ai startups in delft.\n")
-# )
 
 # Endpoint for the chatbot
 @app.route('/chat', methods=['POST'])
@@ -180,27 +184,57 @@ def chatbot():
           id: Chatbot
           required:
             - query
+            - messages
           properties:
             query:
               type: string
               description: The query to the chatbot
               default: "Hello"
+            messages:
+                type: string
+                description: The messages that the chatbot has sent
+                default: "[]"
     responses:
-      200:
-        description: The response of the chatbot
+        200:
+            description: The response of the chatbot
     """
     # Get the query from the body of the request
     query = request.json['query']
-    # Get the response from the chatbot
-    prompt = query+"\n"
+    messages = request.json['messages']
+    prompt = '\n'.join(messages) + '\n' + "User: " + query + '\n'
     response = talk_to_gpt(prompt)
-    # Matches the last DISPLAY: and everything after it until the next line
+    print(response)
+    # Splits the response into the messages
+    # Using regex of Person: message
+    # Where Person is either User,Christopher, DATABASE, Query.
+    # The outputs can be on multiple lines.
+    # Examples:
+    # User: Hello
+    # Christopher: Hello
+    # DATABASE: [1,2,3,4,5]
+    # Query: <search=hello>
+    # It should only match User, Christopher, DATABASE, Query and DISPLAY but not others
+    # It should also match any of the following
+    # prompt: message
+    # something: aifdio
+    # fhuihifds: asjiojsa
+    # ASSSAADSS: adsasa
     import re
-    last_display = re.findall(r'DISPLAY:(.*?)\n', response)[-1]
-    print(last_display)
+    matches = re.findall(r'(Query|DATABASE|Christopher|DISPLAY|User):(.+)', response)
+    
 
-    # Return the response
-    return jsonify(response)
+    answer = None
+    display = []
+    # Make the matches into a list of messages
+    messages = []
+    for i in matches:
+        if i[0] == "Christopher":
+            answer = i[1]
+        elif i[0] == "DISPLAY":
+            display = [get_everything_about_website(int(i.replace(' ',''))) for i in i[1].replace('[','').replace(']','').split(",")]
+        messages.append(i[0] + ": " + i[1])
+    
+    return jsonify({"response": answer, "display": display, "messages": messages})
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=9007)
