@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Map, Marker, Overlay } from "pigeon-maps";
 
 export type GoogleMapComponentProps = {
-  cords: any;
+  cords: any[]
 };
 
 export class GoogleMapComponent extends Component<GoogleMapComponentProps> {
@@ -21,9 +21,10 @@ export class GoogleMapComponent extends Component<GoogleMapComponentProps> {
           );
         })}
         {this.props.cords.map((cord: any, index: any) => {
+          console.log(cord)
           return (
             <Overlay anchor={[cord.latitude, cord.longitude]} offset={[60, 15]}>
-              <span>This is Brussels</span>
+              <span>{cord.name ? cord.name : ""}</span>
             </Overlay>
           );
         })}
