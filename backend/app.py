@@ -10,6 +10,9 @@ import urllib
 import numpy as np
 import pandas as pd
 
+app = Flask(__name__)
+swagger = Swagger(app)
+
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 backend_url = os.getenv("BACKEND_URL")
@@ -134,13 +137,23 @@ def break_christopher_query(s):
     return response
 
 
-def talk_to_gpt(s):
+def talk_to_gpt(s, max_iters=10):
     response = get_completion(s)
+    print(response)
     # Check if it ends with DATA
     if response.endswith("DATA"):
         response = response + "BASE:"
-        
-    return response
+        query = response.split("QUERY:")[1].split("DATA")[0]
+        broken_response = break_christopher_query(query)
+        response += broken_response
+        if max_iters == 1:
+            return s + talk_to_gpt(response + "\nChristopher:", max_iters-1)
+        elif max_iters == 0:
+            return s + response
+        else:
+            return s + talk_to_gpt(response, max_iters-1)
+    else:
+        return s + response
 # print(
 #     talk_to_gpt("\nUser: Find me the locations of ai startups in delft.\n")
 # )
@@ -171,13 +184,9 @@ def chatbot():
     # Get the query from the body of the request
     query = request.json['query']
     # Get the response from the chatbot
-    response = talk_to_gpt(query)
+    response = talk_to_gpt("User:" + query)
     # Return the response
     return jsonify(response)
-
-print(break_christopher_query("<search=ai startups in delft>"))
-app = Flask(__name__)
-swagger = Swagger(app)
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=9007)
