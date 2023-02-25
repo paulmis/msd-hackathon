@@ -150,6 +150,9 @@ def break_christopher_query(s):
         elif query_type == "location":
             result = str(website_locations[int(query_value)])
             response += result
+        elif query_type == "description":
+            result = website_descriptions[int(query_value)]
+            response += result
     return response
 
 
@@ -220,7 +223,7 @@ def chatbot():
     # fhuihifds: asjiojsa
     # ASSSAADSS: adsasa
     import re
-    matches = re.findall(r'(Query|DATABASE|Christopher|DISPLAY|User):(.+)', response)
+    matches = re.findall(r'(Query|DATABASE|Christopher|DISPLAY|User):(.+)\n*', response)
     
 
     answer = None
