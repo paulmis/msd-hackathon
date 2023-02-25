@@ -12,6 +12,15 @@ import pandas as pd
 
 app = Flask(__name__)
 swagger = Swagger(app)
+from flask import request
+
+@app.after_request
+def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    response.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+    return response
+
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -185,6 +194,11 @@ def chatbot():
     # Get the response from the chatbot
     prompt = query+"\n"
     response = talk_to_gpt(prompt)
+    # Matches the last DISPLAY: and everything after it until the next line
+    import re
+    last_display = re.findall(r'DISPLAY:(.*?)\n', response)[-1]
+    print(last_display)
+
     # Return the response
     return jsonify(response)
 
