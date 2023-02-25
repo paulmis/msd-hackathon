@@ -132,18 +132,17 @@ def break_christopher_query(s):
             result = search_by_query(query_value)
             response += result
         elif query_type == "location":
-            result = get_location_data(int(query_value))
+            result = website_locations[int(query_value)]
             response += result
     return response
 
 
 def talk_to_gpt(s, max_iters=10):
     response = get_completion(s)
-    print(response)
     # Check if it ends with DATA
     if response.endswith("DATA"):
         response = response + "BASE:"
-        query = response.split("QUERY:")[1].split("DATA")[0]
+        query = response.split("Query:")[1].split("DATA")[0]
         broken_response = break_christopher_query(query)
         response += broken_response
         if max_iters == 1:
@@ -184,7 +183,8 @@ def chatbot():
     # Get the query from the body of the request
     query = request.json['query']
     # Get the response from the chatbot
-    response = talk_to_gpt("User:" + query)
+    prompt = "User:" + query+"\n"
+    response = talk_to_gpt(prompt)
     # Return the response
     return jsonify(response)
 
