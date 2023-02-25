@@ -7,7 +7,8 @@ function App() {
   return (
     <div className="app">
       <div className="header">
-        <p>text</p>
+        <img src="logo.png" className="logo"/>
+        <h2>Desearch</h2>
       </div>
       <div className="main">
         <div className="left">
