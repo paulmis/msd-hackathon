@@ -11,7 +11,7 @@ export default class List extends React.Component<ListProps> {
         return <div className="list">
                 {
                     this.props.organizations.map((entry, index) => {
-                        return <Organization key={index} info={entry} displayFields={["location"]}/>
+                        return <Organization key={index} info={entry} displayFields={["Industries", "Keywords"]}/>
                     })
                 }
             </div>
