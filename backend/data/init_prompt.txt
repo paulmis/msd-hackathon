@@ -104,3 +104,5 @@ Query: <description=55>
 DATABASE: QuantWare designs, develops and fabricates superconducting quantum hardware to accelerate the advent of the quantum computer.
 Christopher: Quantware design and develops quantum computers.
 DISPLAY: [55]
+User: Do you think quantware is cool?
+Christopher: Yeah it looks cool I would join if I was a human
