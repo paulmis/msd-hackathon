@@ -2,19 +2,21 @@ import React from "react";
 import "./Chat.css";
 import Message, { MessageType, MessageContent } from "./Message";
 
+export type ChatProps = {
+    update_callback: (orgs: any[]) => void
+}
+
 export type ChatState = {
     messages: MessageContent[]
     history: any[]
-    orgs: any[]
 }
 
-export default class Chat extends React.Component<{}, ChatState> {
+export default class Chat extends React.Component<ChatProps, ChatState> {
     constructor(props: any) {
         super(props)
         this.state = {
-            messages: [{text: "sdfudhfudsfhudsfhudsfhusdfsdfsdfsahfisdf", type: MessageType.API}],
+            messages: [{text: "Hey, I'm Desearch. Write a question about organizations in Delft to get started.", type: MessageType.API}],
             history: [],
-            orgs: []
         }
     }
     
@@ -56,9 +58,14 @@ export default class Chat extends React.Component<{}, ChatState> {
             this.setState({
                 history: data.messages,
                 messages: data.messages.map((text: string) => this.isDisplayMessage(text)).filter((message: MessageContent | null) => message != null) as MessageContent[],
-                orgs: data.display
             })
-            console.log(this.state.orgs)
+
+            data.display = data.display.map((org: any) => ({
+                ...org,
+                "Organization Name": org["Organization Name"].startsWith("The name of the organization is ") ? org["Organization Name"].substring(32, org["Organization Name"].length - 1) : org["Organization Name"]
+            }))
+
+            this.props.update_callback(data.display)
         })
         .catch((error) => {
             console.error('Error:', error);

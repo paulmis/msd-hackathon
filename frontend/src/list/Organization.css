@@ -1,0 +1,19 @@
+.organization {
+    height: fit-content;
+    background-color: lightgrey;
+    width: 60vw;
+}
+
+.organization-inner {
+    display: flex;
+    flex-direction: row;
+}
+
+.org-left {
+    width: 30vw;
+    margin: 0 2vw 0 2vw;
+}
+
+.org-right {
+    width: 30vw;
+}
