@@ -1,0 +1,7 @@
+supabase
+flask
+openai
+flasgger
+python-dotenv
+numpy
+pandas
