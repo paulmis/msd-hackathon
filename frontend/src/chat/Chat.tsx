@@ -42,7 +42,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
             query: text
         }))
 
-        fetch('https://seal-app-qwzb7.ondigitalocean.app/chat', {
+        fetch('http://localhost:5000/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
